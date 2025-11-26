@@ -5,15 +5,16 @@ public class AttackState :IState
     EnemyMovement enemy;
     float attackCooldown = 1f;
     float timer = 0;
-
+    Animator animator;
     public AttackState(EnemyMovement enemy)
     {
         this.enemy = enemy;
+        animator = enemy.gameObject.GetComponent<Animator>();
     }
 
     public void Enter()
     {
-       
+        animator.SetBool("IsAttacking", true);
         timer = 0;
     }
 
@@ -36,5 +37,7 @@ public class AttackState :IState
         }
     }
 
-    public void Exit() { }
+    public void Exit() {
+        animator.SetBool("IsAttacking", false);
+    }
 }

@@ -4,17 +4,20 @@ public class IdleState : IState
 {
 
     EnemyMovement enemy;
-
+    Animator  animator;
     float idleTime = 1.5f;
     float timer = 0;
     public IdleState(EnemyMovement enemy)
     {
         this.enemy = enemy;
+        animator = enemy.gameObject.GetComponent<Animator>();
     }
     public void Enter()
     {
         timer = 0;
-        
+        animator.SetBool("IsIdle", true);
+      
+
     }
 
     public void Execute()
@@ -25,6 +28,8 @@ public class IdleState : IState
             enemy.stateMachine.TransitionTo(new WalkState(enemy));
     }
 
-    public void Exit() { }
+    public void Exit() {
+        animator.SetBool("IsIdle", false);
+    }
 
 }

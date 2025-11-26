@@ -18,6 +18,14 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI fpsText;
 
+    [Header("Wave Section")]
+    [Tooltip("Text Variable for Wave")]
+    [SerializeField]
+    TextMeshProUGUI _waveText;
+    [Tooltip("Text Variable for Enemies count")]
+    [SerializeField]
+    TextMeshProUGUI _enemiesText;
+
     //SingleTon Instance
     public static UIManager instance;
     private void Start()
@@ -31,6 +39,7 @@ public class UIManager : MonoBehaviour
             Destroy(gameObject);
         }
         //Adding Listener to Pause And Play Button
+        UpdateTextWave();
         _buttonPuase.onClick.AddListener(TogglePauseAndPlay);
     }
 
@@ -43,11 +52,15 @@ public class UIManager : MonoBehaviour
         {
             //If Wave is Paused then changing the Sprite to Play Sprite
             _buttonPuase.image.sprite = _playAndPauseSprites[1];
+            GameManager.instance.CanSpwan = false;
+            GameManager.instance.CheckCanGenerate();
         }
         else
         {
             //If Wave is Played then changing the Sprite to Pause Sprite
             _buttonPuase.image.sprite = _playAndPauseSprites[0];
+            GameManager.instance.CanSpwan = true;
+            GameManager.instance.CheckCanGenerate();
         }
     }
 
@@ -55,5 +68,24 @@ public class UIManager : MonoBehaviour
     public void UpdateFrameUI(float frameRate) {
 
         fpsText.text = "FPS: " + (frameRate).ToString("F2");
+    }
+
+    public void UpdateTextWave()
+    {
+        _waveText.text = "Wave: " + GameManager.instance.CurrentWave.ToString();
+    }
+    public void NextWaveButton() { 
+
+        StartCoroutine(GameManager.instance.NextWave());
+       
+
+    }
+
+    public void UpdateTextEnemies(int num) {
+
+        _enemiesText.text = "Enemies: " + num;
+    }
+    public void DestroyAllEnemies() {
+        GameManager.instance.DestroyEnemies();
     }
 }

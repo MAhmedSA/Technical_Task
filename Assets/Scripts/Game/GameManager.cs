@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
             UIManager.instance.UpdateTextEnemies(totalEnemies);
         }
         waveCompleted = true;
-        AutoGenerateWave();
+    
 
     }
 
@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour
             totalEnemies = 0;
             UIManager.instance.UpdateTextEnemies(totalEnemies);
         }
-
+        AutoGenerateWave();
     }
     public void StopGenerateEnemies() {
         if (waveCoroutine == null) { 

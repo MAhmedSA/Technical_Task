@@ -15,7 +15,7 @@ public class EnemyMovement : MonoBehaviour
     bool isMove;
 
     float angleView = 15;
-    float AttackDistance = 2f;
+    float AttackDistance = 4f;
     public bool IsMove { get => isMove; set => isMove = value; }
     private void Awake()
     {
@@ -71,6 +71,6 @@ public class EnemyMovement : MonoBehaviour
 
     public bool IsPlayerClose()
     {
-        return Vector3.Distance(transform.position, playerTransform.position) < AttackDistance;
+        return Vector3.SqrMagnitude(transform.position- playerTransform.position) < AttackDistance;
     }
 }

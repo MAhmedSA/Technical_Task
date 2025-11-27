@@ -30,9 +30,8 @@ public class EnemyMovement : MonoBehaviour
     private void FixedUpdate()
     {
         stateMachine.Execute();
-        if (isMove)
+        if (!IsPlayerClose())
         {
-
                 RotateTowardPlayer();
                 Move();
             
@@ -40,11 +39,8 @@ public class EnemyMovement : MonoBehaviour
     }
     
 
-    public void Move() { 
-        if(Vector3.Distance(transform.position, playerTransform.position) < 1.5f)
-        {
-            return;
-        }
+    public void Move() {
+      
         transform.Translate(Vector3.forward * moveSpeed * Time.fixedDeltaTime);
     }
 

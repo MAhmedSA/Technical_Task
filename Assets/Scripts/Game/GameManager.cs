@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour
                 poolingSystem.InitPoolSize += 20;
                 if (canSpawn)
                 {
+                    
                     waveCoroutine = null;
                     waveCoroutine = GenerateWave();
                     CoroutineManager.Instance.StartRoutine(waveCoroutine);
@@ -97,16 +98,17 @@ public class GameManager : MonoBehaviour
 
     IEnumerator GenerateWave()
     {
+       
+            for (int i = 0; i < poolingSystem.InitPoolSize; i++) { 
         
-        for (int i = 0; i < poolingSystem.InitPoolSize; i++) { 
-        
-            yield return new WaitForSeconds(timeBetweenSpawns);
-            freeEnemies.Push(poolingSystem.GetPooledObject());
-            totalEnemies = freeEnemies.Count;
-            UIManager.instance.UpdateTextEnemies(totalEnemies);
-        }
-        waveCompleted = true;
+                yield return new WaitForSeconds(timeBetweenSpawns);
+                freeEnemies.Push(poolingSystem.GetPooledObject());
+                totalEnemies = freeEnemies.Count;
+                UIManager.instance.UpdateTextEnemies(totalEnemies);
+            }
+            waveCompleted = true;
     
+        
 
     }
 
@@ -115,11 +117,13 @@ public class GameManager : MonoBehaviour
         waveCompleted = false;
         CoroutineManager.Instance.StartRoutine(NextWave()); 
     }
-    public void NotifyDie() {
+    public void NotifyDie()
+    {
         foreach (PooledObject enemy in freeEnemies)
         {
             enemy.gameObject.GetComponent<EnemyMovement>().Dead(); ;
         }
+
         CoroutineManager.Instance.StartRoutine(DestroyEnemies());
 
 
@@ -138,7 +142,7 @@ public class GameManager : MonoBehaviour
             UIManager.instance.UpdateTextEnemies(totalEnemies);
         }
 
-        AutoGenerateWave();
+         AutoGenerateWave();
     }
  
     public void CheckCanGenerate() {
@@ -149,14 +153,14 @@ public class GameManager : MonoBehaviour
                 CoroutineManager.Instance.Resume(waveCoroutine);
                
             }
-            if (waveCoroutine==null&& waveCompleted)
-            {
-                waveCoroutine = GenerateWave();
-                CoroutineManager.Instance.StartRoutine(waveCoroutine);
-            }
+            //if (waveCoroutine==null&& waveCompleted)
+            //{
+            //    waveCoroutine = GenerateWave();
+            //    CoroutineManager.Instance.StartRoutine(waveCoroutine);
+            //}
 
         }
-        else {
+        if(!canSpawn) {
             CoroutineManager.Instance.Pause(waveCoroutine);
             Debug.Log(" Spawning Stopped ");
         }

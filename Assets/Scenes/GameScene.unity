@@ -1132,8 +1132,8 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 23.8
+  far clip plane: 500
+  field of view: 50.6
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -1760,9 +1760,9 @@ MonoBehaviour:
   - {fileID: 988302095}
   initPoolSize: 30
   objectToPool:
-  - {fileID: 3320907244929952445, guid: fe5f5a40d4680654288af71051fabaf6, type: 3}
-  - {fileID: 4674932370505253863, guid: adb167a0e5d7c8444b9bc3242773bce2, type: 3}
-  - {fileID: 5397465498118456314, guid: 94ae3665df5f2d54cabe19f10a485e7d, type: 3}
+  - {fileID: -360183047195965436, guid: bf41d58f27154404b8334c443b61b7d9, type: 3}
+  - {fileID: 2927645716782117005, guid: 365e6104e4b667b4390edc438298506d, type: 3}
+  - {fileID: 4597304820812204119, guid: af0d3a4fbd37e0a49b445e21b19d81d0, type: 3}
 --- !u!1 &988302094
 GameObject:
   m_ObjectHideFlags: 0

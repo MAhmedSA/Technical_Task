@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -31,7 +32,7 @@ public class ObjectPool : MonoBehaviour
         PooledObject instance = null;
         for (int i = 0; i < initPoolSize; i++)
         {
-            instance = Instantiate(objectToPool[Random.RandomRange(0, spwanPositions.Length)]);
+            instance = Instantiate(objectToPool[Random.RandomRange(0, objectToPool.Length)]);
             instance.Pool = this;
             instance.transform.position = spwanPositions[Random.RandomRange(0, spwanPositions.Length)].position;
             instance.gameObject.SetActive(false);
@@ -44,7 +45,7 @@ public class ObjectPool : MonoBehaviour
         // if the pool is not large enough, instantiate a new PooledObjects
         if (stack.Count == 0)
         {
-            PooledObject newInstance = Instantiate(objectToPool[Random.RandomRange(0, 3)]);
+            PooledObject newInstance = Instantiate(objectToPool[Random.RandomRange(0, objectToPool.Length)]);
             newInstance.Pool = this;
             newInstance.transform.position = spwanPositions[Random.RandomRange(0, spwanPositions.Length)].position;
             return newInstance;

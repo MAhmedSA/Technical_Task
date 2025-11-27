@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class FrameRate : MonoBehaviour
 {
+    private void Start()
+    {
+        Application.targetFrameRate = 60; // Set target frame rate to 60 FPS
+    }
     void Update()
     {
         //Calculate the FPS

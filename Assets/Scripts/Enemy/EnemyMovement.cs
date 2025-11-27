@@ -15,7 +15,7 @@ public class EnemyMovement : MonoBehaviour
     bool isMove;
 
     float angleView = 15;
-    float AttackDistance = 4f;
+    float sqrAttackDistance = 9f;
     public bool IsMove { get => isMove; set => isMove = value; }
     private void Awake()
     {
@@ -65,12 +65,21 @@ public class EnemyMovement : MonoBehaviour
     }
     public IEnumerator EnableMove()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2f);
         isMove = true;
     }
 
     public bool IsPlayerClose()
     {
-        return Vector3.SqrMagnitude(transform.position- playerTransform.position) < AttackDistance;
+        return Vector3.SqrMagnitude(transform.position- playerTransform.position) < sqrAttackDistance;
     }
+
+    public void Dead() {
+        stateMachine.Initialize(new DeathState(this));  
+    }
+    private void OnDisable()
+    {
+        stateMachine.Initialize(new IdleState(this));  
+    }
+
 }

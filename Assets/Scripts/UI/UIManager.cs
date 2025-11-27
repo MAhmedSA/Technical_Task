@@ -76,7 +76,7 @@ public class UIManager : MonoBehaviour
     }
     public void NextWaveButton() { 
 
-        StartCoroutine(GameManager.instance.NextWave());
+        CoroutineManager.Instance.StartRoutine(GameManager.instance.NextWave());
        
 
     }
@@ -86,6 +86,6 @@ public class UIManager : MonoBehaviour
         _enemiesText.text = "Enemies: " + num;
     }
     public void DestroyAllEnemies() {
-        GameManager.instance.DestroyEnemies();
+        GameManager.instance.NotifyDie();
     }
 }

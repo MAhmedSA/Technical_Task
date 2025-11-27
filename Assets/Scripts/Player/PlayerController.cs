@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
@@ -7,12 +8,20 @@ public class PlayerController : MonoBehaviour
     public float sprintMultiplier = 1.6f;
 
     [Header("Mouse Look")]
-    public float mouseSensitivity = 100f;
-    public float verticalClamp = 80f; // prevent full flip
+    public float mouseSensitivity = 200f;
+    public float verticalClamp = 80f;
 
     private float rotationX = 0f;
+    private float rotationY = 0f;
+    private CharacterController controller;
 
-    void FixedUpdate()
+    void Start()
+    {
+        controller = GetComponent<CharacterController>();   // Get controller
+        
+    }
+
+    void Update()
     {
         MovePlayer();
         RotateCamera();
@@ -20,30 +29,29 @@ public class PlayerController : MonoBehaviour
 
     void MovePlayer()
     {
-        float x = Input.GetAxis("Horizontal"); // A - D
-        float z = Input.GetAxis("Vertical");   // W - S
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
 
-        Vector3 moveDir = transform.right * x + transform.forward * z;
+        // Movement without Y axis
+        Vector3 move = transform.right * x + transform.forward * z;
+        move.y = 0; // Prevent vertical movement
 
         bool sprint = Input.GetKey(KeyCode.LeftShift);
+        float speed = sprint ? moveSpeed * sprintMultiplier : moveSpeed;
 
-        float finalSpeed = sprint ? moveSpeed * sprintMultiplier : moveSpeed;
-
-        transform.position += moveDir * finalSpeed * Time.fixedDeltaTime;
+        controller.Move(move * speed * Time.deltaTime);
     }
 
     void RotateCamera()
     {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.fixedDeltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.fixedDeltaTime;
+        if (Input.GetMouseButton(1)) // Rotate only when holding right click
+        {
+            rotationY += Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+            rotationX -= Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-        // Rotate horizontal (player body)
-        transform.Rotate(Vector3.up * mouseX);
+            rotationX = Mathf.Clamp(rotationX, -verticalClamp, verticalClamp);
 
-        // Rotate vertical (camera pitch)
-        rotationX -= mouseY;
-        rotationX = Mathf.Clamp(rotationX, -verticalClamp, verticalClamp);
-
-        transform.localRotation = Quaternion.Euler(rotationX, transform.eulerAngles.y, 0f);
+            transform.rotation = Quaternion.Euler(rotationX, rotationY, 0f); // FULL X+Y rotation here
+        }
     }
 }

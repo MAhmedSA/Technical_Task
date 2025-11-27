@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator NextWave() {
         _currentWave++;
+        canSpawn = true;
         UIManager.instance.UpdateTextWave();
         switch (_currentWave)
         {
@@ -114,30 +115,32 @@ public class GameManager : MonoBehaviour
         waveCompleted = false;
         CoroutineManager.Instance.StartRoutine(NextWave()); 
     }
+    public void NotifyDie() {
+        foreach (PooledObject enemy in freeEnemies)
+        {
+            enemy.gameObject.GetComponent<EnemyMovement>().Dead(); ;
+        }
+        CoroutineManager.Instance.StartRoutine(DestroyEnemies());
 
-    public void DestroyEnemies() { 
+
+    }
+    public IEnumerator DestroyEnemies() {
+        
+        yield return new WaitForSeconds(2f);
         Debug.Log(" All Enemies"+ freeEnemies.Count);
         for (int i = freeEnemies.Count-1; i >=0; i--)
         {
 
             PooledObject enemy = freeEnemies.Pop();
+
             poolingSystem.ReturnToPool(enemy);
             totalEnemies = 0;
             UIManager.instance.UpdateTextEnemies(totalEnemies);
         }
+
         AutoGenerateWave();
     }
-    public void StopGenerateEnemies() {
-        if (waveCoroutine == null) { 
-             Debug.Log(" No Wave Coroutine to Stop ");
-                return;
-        }
-        if (waveCoroutine != null) {
-            Debug.Log("wave Coroutine exist");
-            CoroutineManager.Instance.Pause(waveCoroutine);
-        }
-   
-    }
+ 
     public void CheckCanGenerate() {
         if (canSpawn)
         {
@@ -154,7 +157,7 @@ public class GameManager : MonoBehaviour
 
         }
         else {
-            StopGenerateEnemies();
+            CoroutineManager.Instance.Pause(waveCoroutine);
             Debug.Log(" Spawning Stopped ");
         }
     }
